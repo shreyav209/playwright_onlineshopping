@@ -9,7 +9,7 @@ test('Online Shopping Test', async ({page})=>
 
     //Dataset
     const product_name ='ADIDAS ORIGINAL'; 
-    const country = 'India';
+    const country = 'Ind';
 
     //Select the item 
     const products = await page.locator('//div[@class="card"]')
@@ -40,24 +40,24 @@ test('Online Shopping Test', async ({page})=>
     //await page.locator("//button[text()='Checkout']").click();
 
     //checkout
-    await page.getByPlaceholder('Select Country').fill(country);
-    // await page.locator("//section//button[2]").click();
-    await page.waitForTimeout(2000);
-    const dropdown = page.locator(".ta-results");
-    await page.waitForTimeout(2000);
-    const optionsCount = await dropdown.locator("button").count();
-    console.log(optionsCount)
-    for (let i = 0; i < optionsCount; ++i) {
-        const text = await dropdown.locator("button").nth(i).textContent();
-        console.log(text)
-        if (text === " India") {
-            await dropdown.locator("button").nth(i).click();
-            break;
-        }
-    }
-    await page.locator("//a[text()='Place Order']").click();
-    await page.locator("//button[text()='Click To Download Order Details in Excel']").click();
-    await page.waitForTimeout(2000);
+    await page.locator("[placeholder*='Country']").type("ind");
+ 
+   const dropdown = page.locator(".ta-results");
+   await dropdown.waitFor();
+   const optionsCount = await dropdown.locator("button").count();
+   for (let i = 0; i < optionsCount; ++i) {
+      const text = await dropdown.locator("button").nth(i).textContent();
+      if (text === " India") {
+         await dropdown.locator("button").nth(i).click();
+         break;
+      }
+   }
+  await page.waitForTimeout(3000)
+   //expect(page.locator(".user__name [type='text']").first()).toHaveText(email);
+   await page.locator(".action__submit").click();
+   await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
+   const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
+   //console.log(orderId);
     
 
 }) 
